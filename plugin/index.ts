@@ -8,7 +8,7 @@ export function VitePluginElectronBuilder(userOptions: Partial<ViteElectronBuild
   let options: ResolvedViteElectronBuilderOptions
 
   return {
-    name: 'vite-plugin-electron-builder',
+    name: 'wormhole',
     configResolved(config) {
       viteConfig = config
       options = resolveOptions(userOptions, viteConfig)
@@ -17,7 +17,6 @@ export function VitePluginElectronBuilder(userOptions: Partial<ViteElectronBuild
       httpServer.on('listening', () => {
         const address: any = httpServer.address()
         options.env.DEV_SERVER_URL = `http://${address.address}:${address.port}`
-
         handleDev(options)
       })
     },

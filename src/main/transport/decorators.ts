@@ -8,14 +8,7 @@ function GetParamsFromMessageChannel() {
   return function (target: any, propertyName: string, descriptor: PropertyDescriptor) {
     const method = descriptor.value
     descriptor.value = function (args: any[]) {
-      const [ipcMainEventObject, ...payload] = args
-      const newArgs = [
-        ...payload,
-        {
-          evt: ipcMainEventObject,
-        },
-      ]
-      return method.apply(this, newArgs)
+      return method.apply(this, args)
     }
     return descriptor
   }
@@ -23,8 +16,6 @@ function GetParamsFromMessageChannel() {
 
 export function IpcInvoke(messageChannel: string) {
   ipcMain.handle(messageChannel, (...args) => ipcMessageDispatcher.emit(messageChannel, ...args))
-
-  // Do not modify the order!
   return applyDecorators(
     GetParamsFromMessageChannel(),
     MessagePattern(messageChannel),

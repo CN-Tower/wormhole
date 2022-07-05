@@ -1,8 +1,7 @@
 import { join } from 'path'
-import { writeFileSync } from 'fs'
+import { copySync } from 'fs-extra'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { compileFile } from 'bytenode'
 import { VitePluginElectronBuilder } from './plugin'
 
 // https://vitejs.dev/config/
@@ -15,15 +14,22 @@ export default defineConfig({
       preloadFile: join(__dirname, 'src/preload/index.ts'),
       tsconfig: './tsconfig.main.json',
       electronBuilderConfig: './electron-builder.config.js',
-      external: ['@nestjs'],
+      external: [
+        '@nestjs',
+        'electron',
+        'electron-log',
+        'electron-store',
+        'express',
+        'rxjs',
+        'node-fetch',
+        'electron-updater',
+        'glob',
+        'fs-extra',
+        'mkdirp',
+        'url-parse'
+      ],
       afterEsbuildBuild: async () => {
-        await compileFile({
-          filename: './dist/main/index.js',
-          output: './dist/main/main.jsc',
-          electron: true,
-        })
-
-        writeFileSync('./dist/main/index.js', 'require(\'bytenode\');require(\'./main.jsc\')')
+        copySync('src/main/assets', 'dist/main/assets')
       },
     }),
   ],
@@ -31,7 +37,7 @@ export default defineConfig({
     alias: {
       '@render': join(__dirname, 'src/render'),
       '@main': join(__dirname, 'src/main'),
-      '@common': join(__dirname, 'src/common'),
+      '@types': join(__dirname, 'src/types'),
     },
   },
   base: './',

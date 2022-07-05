@@ -12,7 +12,6 @@ async function bootstrap() {
         strategy: new ElectronIpcTransport(),
       },
     )
-
     await nestApp.listen()
   }
   catch (error) {
