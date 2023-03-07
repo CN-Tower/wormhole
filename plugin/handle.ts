@@ -19,7 +19,6 @@ function runMainProcess(mainFile: string) {
 export function handleDev(options: ResolvedViteElectronBuilderOptions) {
   const { mainFile } = options
   const esbuildOptions = createEsbuildOptions(options)
-
   let child: ChildProcess
   build({
     ...esbuildOptions,
@@ -34,7 +33,6 @@ export function handleDev(options: ResolvedViteElectronBuilderOptions) {
             child.off('exit', exitMainProcess)
             child.kill()
           }
-
           child = runMainProcess(mainFile)
         }
       },
@@ -45,7 +43,6 @@ export function handleDev(options: ResolvedViteElectronBuilderOptions) {
       child.off('exit', exitMainProcess)
       child.kill()
     }
-
     child = runMainProcess(mainFile)
   })
 }
@@ -53,14 +50,11 @@ export function handleDev(options: ResolvedViteElectronBuilderOptions) {
 export function handleBuild(options: ResolvedViteElectronBuilderOptions) {
   const { electronBuilderConfig } = options
   const esbuildOptions = createEsbuildOptions(options)
-
   build(esbuildOptions).then(async () => {
     await options.afterEsbuildBuild()
-
     await electronBuilder({
       config: electronBuilderConfig,
     })
-
     console.log(kolorist.green('Main Process Build Succeeded.'))
   }).catch((error) => {
     console.log(`\n${kolorist.red('Main Process Build Failed')}\n`, error, '\n')

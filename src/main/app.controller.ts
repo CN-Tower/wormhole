@@ -9,8 +9,5 @@ export class AppController {
   }
 
   @IpcInvoke('ipc/getLocalAddress')
-  public async handleGetLocalAddress(msg: string) {
-    const ip = this.appService.getLocalIpAddress()
-    return `http://${ip}:26111`
-  }
+  public async handleGetLocalAddress() {}
 }

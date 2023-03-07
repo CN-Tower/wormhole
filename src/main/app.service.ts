@@ -1,10 +1,7 @@
-import { Injectable } from '@nestjs/common'
-import { app, BrowserWindow } from 'electron'
 import { join } from 'path'
+import { Injectable } from '@nestjs/common'
+import { BrowserWindow, app } from 'electron'
 import { IS_DEV } from '@main/config'
-import fs from 'fs'
-import os from 'os'
-import path from 'path'
 import express from 'express'
 
 @Injectable()
@@ -13,14 +10,17 @@ export class AppService {
 
   public async initApp() {
     app.on('window-all-closed', () => {
-      if (process.platform !== 'darwin') app.quit()
+      if (process.platform !== 'darwin')
+        app.quit()
     })
     if (IS_DEV) {
       if (process.platform === 'win32') {
         process.on('message', (data) => {
-          if (data === 'graceful-exit') app.quit()
+          if (data === 'graceful-exit')
+            app.quit()
         })
-      } else {
+      }
+      else {
         process.on('SIGTERM', () => {
           app.quit()
         })
@@ -62,33 +62,15 @@ export class AppService {
 
     this.mainWindow.loadURL(URL)
 
-    if (IS_DEV) {
+    if (IS_DEV)
       this.mainWindow.webContents.openDevTools()
-    } else {
+    else
       this.mainWindow.removeMenu()
-    }
   }
 
   private startLocalServer() {
     const server = express()
     server.use(express.static(app.getPath('downloads')))
     server.listen(26111, () => console.log('Local server start!'))
-  }
-
-  public getLocalIpAddress() {
-    let interfaces = os.networkInterfaces()
-    for (const devName in interfaces) {
-      const iface = interfaces[devName]
-      for (let i = 0; i < iface.length; i++) {
-        let alias = iface[i]
-        if (
-          alias.family === 'IPv4' &&
-          alias.address !== '127.0.0.1' &&
-          !alias.internal
-        ) {
-          return alias.address
-        }
-      }
-    }
   }
 }

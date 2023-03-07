@@ -1,10 +1,10 @@
-<template>
-  <Layout />
-</template>
-
 <script setup lang="ts">
-import Layout from '@render/pages/Layout.vue'
+
 </script>
+
+<template>
+  <div class="wrapper" />
+</template>
 
 <style lang="scss">
 * {
@@ -17,5 +17,8 @@ html, body {
 }
 #app {
   height: 100%;
+}
+.wrapper {
+
 }
 </style>
