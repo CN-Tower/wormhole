@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { BrowserWindow, app } from 'electron'
 import { IS_DEV } from '@main/config'
 import express from 'express'
+import log from 'electron-log'
 
 @Injectable()
 export class AppService {
@@ -32,6 +33,7 @@ export class AppService {
     app.on('before-quit', () => {
       this.mainWindow.removeAllListeners()
     })
+    log.info('open-file-path:', app.commandLine.getSwitchValue('open-file-path'))
 
     await app.whenReady()
     this.startLocalServer()
